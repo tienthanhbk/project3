@@ -127,6 +127,30 @@ exports.addToWishlist = (req, res) => {
   })
 }
 
+exports.getWishlist = (req, res) => {
+  if(!req.isAuthenticated()) return res.json({isAuthenticated: false, error_msg: "Ban phai dang nhap"});
+  const idUser = req.user.idUser;
+  Product.getWishlist(idUser, (err, results) => {
+    if(err) return res.json({error_msg: err});
+    return res.json({wishList: results});
+  })
+}
+
+exports.removeFromWishlist = (req, res) => {
+  if(!req.isAuthenticated()) return res.json({isAuthenticated: false, error_msg: "Ban phai dang nhap"});
+  const idUser = req.user.idUser;
+  const product = {
+    id: req.body.idProduct,
+    store: {
+      id: req.body.idStore
+    }
+  }
+  Product.removeFromWishlist(idUser, product, (err, results) => {
+    if(err) return res.json({error_msg: err});
+    return res.json({msg: 'Remove success'});
+  })
+}
+
 exports.getReviews = (req, res) => {
   const idProduct = req.body.idProduct;
   const idStore = req.body.idStore;

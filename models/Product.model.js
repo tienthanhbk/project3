@@ -333,6 +333,65 @@ exports.addToWishlist = (product, user, callback) => {
   })
 }
 
+exports.getWishlist = (idUser, callback) => {
+  poolConnection.getConnection((err, connection) => {
+    if(err) return callback(err, null);
+    const queryString = "SELECT * FROM ecommerce.wish_list wl, ecommerce.store_product st_pr, ecommerce.store st, ecommerce.product pr, ecommerce.imageproduct ip, ecommerce.brand br "
+    + " where wl.user_idUser = ? "
+    +" AND wl.product_idProduct = st_pr.product_idProduct "
+    +" AND wl.store_idStore = st_pr.store_idstore "
+    +" AND st_pr.product_idProduct = pr.idProduct "
+    +" AND st_pr.store_idstore = st.idstore "
+    +" AND pr.idProduct = ip.product_idProduct "
+    +" AND pr.brand_idbrand = br.idbrand;";
+    const paramsQuery = [idUser];
+    connection.query({sql: queryString, nestTables: true}, paramsQuery, (err, results) => {
+      if(err) {
+        console.log("err: ", err);
+        return callback(err, null);
+      }
+      if(!results[0]) return callback(null, []);
+      const wishList = [];
+      results.forEach((result) => {
+        const product = {
+          id: result.pr.idProduct,
+          name: result.pr.name,
+          price: result.st_pr.price,
+          currency: 'USD',
+          imageLink: result.ip.link_Image,
+          brand: {
+            id: result.br.idbrand,
+            name: result.br.name
+          },
+          store: {
+            id: result.st.idstore,
+            name: result.st.name,
+          }
+        }
+        wishList.push(product);
+      })
+      return callback(null, wishList);
+    })
+    connection.release()
+  })
+}
+
+exports.removeFromWishlist = (idUser, product, callback) => {
+  const idProduct = product.id;
+  const idStore = product.store.id;
+  poolConnection.getConnection((err, connection) => {
+    if(err) return callback(err, null);
+    const queryString = "DELETE FROM ecommerce.wish_list "
+    + " WHERE user_idUser= ? and product_idProduct= ? and store_idStore= ?;";
+    const params = [idUser, idProduct, idStore];
+    connection.query({sql: queryString}, params, (err, results) => {
+      if(err) return callback(err, null);
+      return callback(null, null);
+    })
+    connection.release();
+  })
+}
+
 exports.getReviews = (idProduct, idStore, callback) => {
   poolConnection.getConnection((err, connection) => {
     if(err) return callback(err, null);

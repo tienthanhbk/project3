@@ -9,6 +9,8 @@ router.post('/subcate/:idSubcate', productController.getBySubCateId);
 router.post('/sosanh/:idProduct/:idStore1/:nameProduct', productController.soSanhSanPham);
 router.post('/sanphamlienquan/:idProduct', productController.getRelationProducts);
 router.post('/them-vao-yeu-thich', productController.addToWishlist);
+router.post('/xoa-khoi-yeu-thich', productController.removeFromWishlist);
+router.post('/xem-yeu-thich', productController.getWishlist);
 router.post('/phanhoisanpham', productController.reviewProduct);
 router.post('/timkiemsanpham', productController.findProductsByName);
 router.post('/get-reviews', productController.getReviews);
