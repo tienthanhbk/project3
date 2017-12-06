@@ -93,9 +93,13 @@ exports.login = (req, res, next) => {
   // console.log('current user: ', req.user);
   if(!req.user) return res.json({errAuthen: 'Xac thuc fail!!!'});
   res.json({user: req.user});
-
-
 }
+
+exports.getLoginInfo = (req, res) => {
+  if(req.isAuthenticated()) return res.json({user: req.user});
+  return res.json({});
+}
+
 exports.logout = (req, res) => {
   req.logout();
   res.json({msg: 'You are out of my system!'});

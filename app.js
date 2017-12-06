@@ -17,6 +17,8 @@ var poolConnection = require('./models/pool.connection');
 require('./polyfill/index').usePolyfill();
 const passportConfig = require('./config/passport.config');
 // const passportConfigAdmin = require('./config/passport.admin.config');
+require('./config/passport.serialze');
+require('./config/passport.deserialize');
 
 
 //Load routers

@@ -35,10 +35,24 @@ app.themVaoGioHang = function(idSanPham, idCuaHang, name, price){
 
 app.controller("account", function ($scope, $http, $window, $rootScope) {
     // $window.localStorage.setItem('gioHang','') ;
-    $rootScope.user = $window.localStorage.getItem('user');
+    // $rootScope.user = $window.localStorage.getItem('user');
     $scope.trangThaiTimKiemCuaHang = false;
     $scope.trangThaiTimKiemSanPham = false;
-
+    (function(){
+      $http({
+          method: "POST",
+          url: "/users/lay-thong-tin-dang-nhap"
+      }).success(function (result) {
+          console.log('Thong tin dang nhap: ', result);
+          if(!result.user) {
+            return $rootScope.user = '';
+          }
+          $window.localStorage.setItem('user', result.user.username);
+          $rootScope.user = result.user.username;
+      }).error(function (err) {
+          console.log("Error: ", err);
+      });
+    })();
     $scope.dang_xuat = function () {
 
         console.log('CLickkk');
@@ -66,7 +80,7 @@ app.controller("account", function ($scope, $http, $window, $rootScope) {
         }else{
             $scope.trangThaiTimKiemCuaHang = false;
             $scope.trangThaiTimKiemSanPham = true;
-            
+
             console.log('Tim kiem san pham');
             console.log('Cau lenh tim kiem: ', $scope.querySanPham);
             data = {
@@ -85,7 +99,7 @@ app.controller("account", function ($scope, $http, $window, $rootScope) {
                 alert("Unable to connect to the server.");
             });
         }
-        
+
     }
     $scope.timKiemCuaHang = function() {
         if($scope.trangThaiTimKiemCuaHang==true){
@@ -143,7 +157,7 @@ app.controller('sign-up', function ($http, $scope, $window) {
 });
 app.controller('dang_nhap', function ($http, $scope, $window, $rootScope, $location) {
     console.log('$window.lastUrl: ', $window.lastUrl);
-    $window.localStorage.setItem('user', '');//Thanh fix
+    // $window.localStorage.setItem('user', '');//Thanh fix
     $rootScope.user = null;
     $scope.dangNhap = function (username, password) {
         var user = {
@@ -627,7 +641,7 @@ app.controller('trangCaNhan',function($scope, $http){
         console.log(result);
         $scope.khachHang = result.data.user;
     });
-    
+
     $scope.suaThongTin = function( username, email, phone, address){
         data={
             username: username,

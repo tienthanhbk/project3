@@ -34,18 +34,18 @@ passport.use('local', new LocalStrategy((username, password, next) => {
   })
 }))
 
-passport.serializeUser(function(user, next) {
-  next(null, user.idUser);
-});
+// passport.serializeUser(function(user, next) {
+//   next(null, user.idUser);
+// });
+//
+// passport.deserializeUser(function(id, next) {
+//   User.getById(id, (err, user) => {
+//     if(err) { return next(err) };
+//     next(null, user);
+//   })
+// });
 
-passport.deserializeUser(function(id, next) {
-  User.getById(id, (err, user) => {
-    if(err) { return next(err) };
-    next(null, user);
-  })
-});
-
-exports.isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) return next()
-  return res.json({ error_msg: 'Authenticate failed!' });
-};
+// exports.isAuthenticated = (req, res, next) => {
+//   if (req.isAuthenticated()) return next()
+//   return res.json({ error_msg: 'Authenticate failed!' });
+// };

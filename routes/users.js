@@ -26,4 +26,6 @@ router.post('/guiThongTin', userController.capnhat);
 router.post('/login', passport.authenticate('local') , userController.login);
 router.post('/logout', userController.logout);
 
+router.post('/lay-thong-tin-dang-nhap', userController.getLoginInfo);
+
 module.exports = router;
