@@ -4,6 +4,6 @@ var orderController = require('../controllers/Order.controller');
 var passport = require('passport');
 
 router.post('/dathang',  orderController.makeOrder);
-router.post('/xem-lich-su', orderController.getLichSuMuaHang);
+router.post('/xem-lich-su-mua-hang', orderController.getLichSuMuaHang);
 
 module.exports = router;
